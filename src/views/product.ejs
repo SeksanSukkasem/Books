@@ -10,21 +10,33 @@
 <body>
     <header>
         <h1>Online Book Rental</h1>
-        <% dataBooks.forEach(product => { %>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/books/"></a></li>
+                <li><a href="/books/">books</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contact">Contact</a></li>
+
+                <li><a href="/AddBook">Add Book</a></li>
             </ul>
         </nav>
-        <% }); %>
     </header>
-    
     <main>
-
+        <nav>
+            <ul>
+                <% product.forEach(products=> { %>
+                    <li>
+                        <p>
+                            <%= products.productTitle %>
+                        </p>
+                        <p>Description: <%= products.productDescription %>
+                        </p>
+                    </li>
+                    <% }); %>
+            </ul>
+        </nav>
     </main>
+    
     
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
