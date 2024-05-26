@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Book Rental</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+
+        main {
+            padding: 2rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Book details style */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li p {
+            margin-bottom: 10px;
+        }
+
+        li p:first-child {
+            font-weight: bold;
+        }
+
+        li p:last-child {
+            color: #fdf9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Online Book Rental Details</h1>
+        <nav>
+            <ul>
+                <% dataBooks.forEach(book=> { %>
+                    <li>
+                        <p>
+                            <%= book.productTitle %>
+                        </p>
+                        <p>Description: <%= book.productDescription %>
+                        </p>
+                        <p>Price: <%= book.productPrice %> บาท</p>
+                    </li>
+                    <% }); %>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <nav>
+            <ul>
+
+                <button><a href="/addBook">Add Book</a></button>
+            </ul>
+        </nav>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Online Book Rental</p>
+    </footer>
+</body>
+
+<!-- นี้คือไฟล์ booksDetail.ejs -->
+
+</html>
+
