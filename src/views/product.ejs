@@ -1,11 +1,81 @@
-<!-- product.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Book Rental</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .product-item {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 5px;
+            width: calc(33% - 2rem);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-item p {
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -13,84 +83,25 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/books/">books</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contact">Contact</a></li>
-
-                <li><a href="/AddBook">Add Book</a></li>
+                <li><a href="/addBook">Add Book</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <nav>
-            <ul>
-                <% product.forEach(products=> { %>
-                    <li>
-                        <p>
-                            <%= products.productTitle %>
-                        </p>
-                        <p>Description: <%= products.productDescription %>
-                        </p>
-                    </li>
-                    <% }); %>
-            </ul>
-        </nav>
+        <div class="product-list">
+            <% product.forEach(products => { %>
+                <div class="product-item">
+                    <h2><a href="/books/<%= products.productTitle %>"><%= products.productTitle %></a></h2>
+                    <p><strong>Description:</strong> <%= products.productDescription %></p>
+                    <!-- <p><strong>Price:</strong> <%= products.productPrice %> บาท</p> -->
+                </div>
+            <% }); %>
+        </div>
     </main>
-    
-    
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
     </footer>
 </body>
 </html>
-
-<style>
-    /* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-}
-
-header h1 {
-    margin: 0;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 1rem;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-main {
-    padding: 2rem;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-    text-align: center;
-}
-
-</style>

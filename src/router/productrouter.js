@@ -11,55 +11,71 @@ const connection = mysql.createConnection({
     database: 'node_sql'
 });
 
-// Route to get all product books from MySQL database and display only title and description in "/"
-productRouters.get("/", (req, res) => {
-    const sql = "SELECT productTitle, productDescription FROM products"; // Assuming your table name is 'products'
+// productRouters.get('/', (req, res) => {
+//     const sql = 'SELECT productTitle, productDescription FROM products';
+//     connection.query(sql, (err, data) => {
+//         if (err) {
+//             debug(err);
+//             return res.json('Error');
+//         }
+//         res.render('home', {
+//             dataBooks: data
+//         });
+//     });
+// });
+
+
+// Route to get all product books from MySQL database and display in "/books"
+productRouters.get('/', (req, res) => {
+    const sql = 'SELECT id, productTitle, productDescription FROM products';
     connection.query(sql, (err, data) => {
         if (err) {
             debug(err);
-            return res.json("Error");
+            return res.json('Error');
         }
-        res.render("product", {
-            product: data // Pass the fetched data to the template
+        res.render('product', {
+            product: data
         });
     });
 });
 
-// Route to get all product books from MySQL database and display all columns in "/books"
-productRouters.get("/books", (req, res) => {
-    const sql = "SELECT * FROM products"; // Assuming your table name is 'products'
-    connection.query(sql, (err, data) => {
-        if (err) {
-            debug(err);
-            return res.json("Error");
-        }
-        res.render("booksDetail", {
-            dataBooks: data // Pass the fetched data to the template
-        });
-    });
-});
 
+// Route to render addBook page
 productRouters.get('/addBook', (req, res) => {
-    
-    res.render("Add");
+    res.render('Add');
 });
 
-
-
+// Route to handle addBook form submission
 productRouters.post('/addBook', (req, res) => {
-    const { productTitle, productDescription, productPrice, imageUrl } = req.body;
+    const { productTitle, productDescription, productPrice } = req.body;
 
-    const query = "INSERT INTO products (productTitle, productDescription, productPrice, imageUrl) VALUES (?, ?, ?, ?)";
+    if (!productTitle || !productDescription || !productPrice) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
 
-    connection.query(query, [productTitle, productDescription, productPrice, imageUrl], (err, data) => {
+    const query = 'INSERT INTO products (productTitle, productDescription, productPrice) VALUES (?, ?, ?)';
+    connection.query(query, [productTitle, productDescription, productPrice], (err, results) => {
         if (err) {
-            debug(err);
-            return res.status(500).json({ error: "Error adding book" });
+            console.error('Error inserting book into database:', err);
+            return res.status(500).json({ error: 'Error inserting book into database' });
         }
-        // Assuming you have an "addBook.ejs" template
-        res.render("Add", {
-            data: data // Pass the fetched data to the template
-        });
+        res.redirect('/books'); // Redirect to the books list page after successful insertion
+    });
+});
+
+// Route to get book details by ID
+productRouters.get('/books/:productTitle', (req, res) => {
+    const bookId = req.params.productTitle;
+    const query = 'SELECT * FROM products WHERE productTitle = ?';
+    connection.query(query, [bookId], (err, result) => {
+        if (err) {
+            console.error('Error fetching book details:', err);
+            return res.status(500).json({ error: 'Error fetching book details' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        res.render('booksDetail', { dataBooks: result });
     });
 });
 
