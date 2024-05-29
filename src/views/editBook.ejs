@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Rental Details</title>
+    <title>Edit Book</title>
     <style>
         /* Reset CSS */
         * {
@@ -52,31 +52,39 @@
             padding: 2rem;
         }
 
-        .book-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .book-item {
+        form {
             background: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            width: 80%;
+            margin: 0 auto;
+            max-width: 600px;
         }
 
-        .book-item p {
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
             margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        .book-item p:first-child {
-            font-weight: bold;
+        form button {
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        .book-item p:last-child {
-            color: #333;
+        form button:hover {
+            background-color: #3742fa;
         }
 
         footer {
@@ -96,7 +104,7 @@
 </head>
 <body>
     <header>
-        <h1>Online Book Rental Details</h1>
+        <h1>Edit Book</h1>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -108,17 +116,18 @@
     </header>
 
     <main>
-        <div class="book-list">
-            <% dataBooks.forEach(book => { %>
-                <div class="book-item">
-                    <p><%= book.productTitle %></p>
-                    <p>Description: <%= book.productDescription %></p>
-                    <p>Price: <%= book.productPrice %> บาท</p>
-                    <a class="edit" href="/editBook/<%= book.productTitle %>">Edit</a>
-                </div>
+        <form action="/editBook/<%= book.productTitle %>" method="POST">
+            <label for="productTitle">หนังสือ:</label>
+            <input type="text" id="productTitle" name="productTitle" value="<%= book.productTitle %>" required>
 
-            <% }); %>
-        </div>
+            <label for="productDescription">รายละเอียดหนังสือ:</label>
+            <textarea id="productDescription" name="productDescription" required><%= book.productDescription %></textarea>
+
+            <label for="productPrice">ราคา:</label>
+            <input type="number" id="productPrice" name="productPrice" value="<%= book.productPrice %>" required>
+
+            <button type="submit">Save Changes</button>
+        </form>
     </main>
 
     <footer>

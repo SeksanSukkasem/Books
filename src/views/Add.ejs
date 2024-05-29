@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,7 +50,8 @@
             margin: 10px 0 5px;
         }
 
-        input, textarea {
+        input,
+        textarea {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -82,24 +84,60 @@
             text-align: center;
             margin-top: 20px;
         }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
     </style>
 </head>
+
 <body>
     <header>
-        <h1>Online Book Rental</h1>
+        <h1>Add Book</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/addBook">Add Book</a></li>
+            </ul>
+        </nav>
     </header>
+
     <main>
         <form id="bookForm">
-            <label for="productTitle">Title:</label>
+            <label for="productTitle">หนังสือ:</label>
             <input type="text" id="productTitle" name="productTitle" required>
 
-            <label for="productDescription">Description:</label>
+            <label for="productDescription">รายละเอียดหนังสือ:</label>
             <textarea id="productDescription" name="productDescription" required></textarea>
 
-            <label for="productPrice">Price:</label>
+            <label for="productPrice">ราคา:</label>
             <input type="number" id="productPrice" name="productPrice" required>
 
-            <button type="submit">Add Book</button>
+            <button type="submit">Submit</button>
         </form>
         <div id="message"></div> <!-- Message container -->
     </main>
@@ -109,14 +147,14 @@
 
     <script>
         // Handle form submission
-        document.getElementById('bookForm').addEventListener('submit', function(event) {
+        document.getElementById('bookForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent default form submission
 
             // Collect form data
             const formData = {
-                title: document.getElementById('productTitle').value,
-                description: document.getElementById('productDescription').value,
-                price: document.getElementById('productPrice').value
+                productTitle: document.getElementById('productTitle').value,
+                productDescription: document.getElementById('productDescription').value,
+                productPrice: document.getElementById('productPrice').value
             };
 
             // Send form data to server
@@ -127,24 +165,25 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                const messageElement = document.getElementById('message');
-                if (data.error) {
+                .then(response => response.json())
+                .then(data => {
+                    const messageElement = document.getElementById('message');
+                    if (data.error) {
+                        messageElement.style.color = 'red';
+                        messageElement.textContent = data.error;
+                    } else {
+                        messageElement.style.color = 'green';
+                        messageElement.textContent = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const messageElement = document.getElementById('message');
                     messageElement.style.color = 'red';
-                    messageElement.textContent = data.error;
-                } else {
-                    messageElement.style.color = 'green';
-                    messageElement.textContent = data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageElement = document.getElementById('message');
-                messageElement.style.color = 'red';
-                messageElement.textContent = 'An error occurred while adding the book.';
-            });
+                    messageElement.textContent = 'An error occurred while adding the book.';
+                });
         });
     </script>
 </body>
+
 </html>

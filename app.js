@@ -50,6 +50,8 @@ app.use(morgan('combined'));
 app.use('/', productrouter);
 app.use('/books', productrouter);
 app.use('/addBook', productrouter);
+app.use('/editBook', productrouter);
+
 
 app.use(express.static(path.join(__dirname, "./public/")));
 app.set("views", "./src/views");
