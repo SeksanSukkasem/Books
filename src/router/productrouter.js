@@ -30,7 +30,7 @@ productRouters.get('/addBook', (req, res) => {
     res.render('Add');
 });
 
-/// Route to handle addBook form submission
+// Route to handle addBook form submission
 productRouters.post('/addBook', (req, res) => {
     const { productTitle, productDescription, productPrice } = req.body;
 
@@ -66,9 +66,9 @@ productRouters.get('/books/:productTitle', (req, res) => {
 
 // Route to render edit book page
 productRouters.get('/editBook/:productTitle', (req, res) => {
-    const bookId = req.params.productTitle;
+    const bookTitle = req.params.productTitle;
     const query = 'SELECT * FROM products WHERE productTitle = ?';
-    connection.query(query, [bookId], (err, result) => {
+    connection.query(query, [bookTitle], (err, result) => {
         if (err) {
             console.error('Error fetching book for edit:', err);
             return res.status(500).json({ error: 'Error fetching book for edit' });
@@ -81,16 +81,19 @@ productRouters.get('/editBook/:productTitle', (req, res) => {
 });
 
 // Route to handle edit book form submission
-productRouters.post('/editBook/:productTitle', (req, res) => {
-    const bookTitle = req.params.productTitle;
+productRouters.post('/editBook/:id', (req, res) => {
+    const bookId = req.params.id;
     const { productTitle, productDescription, productPrice } = req.body;
 
-    const query = 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE productTitle = ?';
-    connection.query(query, [productTitle, productDescription, productPrice, bookTitle], (err, result) => {
+    console.log('Received data for update:', { bookId, productTitle, productDescription, productPrice });
+
+    const query = 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE id = ?';
+    connection.query(query, [productTitle, productDescription, productPrice, bookId], (err, result) => {
         if (err) {
             console.error('Error updating book:', err);
             return res.status(500).json({ error: 'Error updating book' });
         }
+        console.log('Update result:', result);
         res.redirect('/books'); // Redirect to the books list page after successful update
     });
 });
