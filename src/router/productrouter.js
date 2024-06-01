@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
-const debug = require('debug')('app');
 const multer = require('multer');
+const path = require('path');
 const productRouters = express.Router();
 
 // Create MySQL connection
@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads');
+        cb(null, 'src/image/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -24,21 +24,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
-// Middleware to parse URL-encoded bodies (from HTML forms)
-productRouters.use(express.urlencoded({ extended: true }));
-
 // Route to get all product books from MySQL database and display in "/books"
 productRouters.get('/', (req, res) => {
-    const sql = 'SELECT id, productTitle, productDescription, productPrice FROM products';
+    const sql = 'SELECT id, productTitle, productDescription, productPrice, image FROM products';
     connection.query(sql, (err, data) => {
         if (err) {
-            debug(err);
             return res.json('Error');
         }
-        res.render('product', {
-            product: data
-        });
+        res.render('product', { product: data });
     });
 });
 
@@ -48,15 +41,16 @@ productRouters.get('/addBook', (req, res) => {
 });
 
 // Route to handle addBook form submission
-productRouters.post('/addBook', (req, res) => {
+productRouters.post('/addBook', upload.single('image'), (req, res) => {
     const { productTitle, productDescription, productPrice } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!productTitle || !productDescription || !productPrice) {
+    if (!productTitle || !productDescription || !productPrice || !image) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const query = 'INSERT INTO products (productTitle, productDescription, productPrice) VALUES (?, ?, ?)';
-    connection.query(query, [productTitle, productDescription, productPrice], (err, results) => {
+    const query = 'INSERT INTO products (productTitle, productDescription, productPrice, image) VALUES (?, ?, ?, ?)';
+    connection.query(query, [productTitle, productDescription, productPrice, image], (err, results) => {
         if (err) {
             console.error('Error inserting book into database:', err);
             return res.status(500).json({ error: 'Error inserting book into database' });
