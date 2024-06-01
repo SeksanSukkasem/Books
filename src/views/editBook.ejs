@@ -117,13 +117,13 @@
 
     <main>
         <form action="/editBook/<%= book.id %>" method="POST">
-            <label for="productTitle">หนังสือ:</label>
+            <label for="productTitle">Title:</label>
             <input type="text" id="productTitle" name="productTitle" value="<%= book.productTitle %>" required>
 
-            <label for="productDescription">รายละเอียดหนังสือ:</label>
+            <label for="productDescription">Description:</label>
             <textarea id="productDescription" name="productDescription" required><%= book.productDescription %></textarea>
 
-            <label for="productPrice">ราคา:</label>
+            <label for="productPrice">Price:</label>
             <input type="number" id="productPrice" name="productPrice" value="<%= book.productPrice %>" required>
 
             <button type="submit">Save Changes</button>

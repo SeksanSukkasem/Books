@@ -2,8 +2,7 @@
 1 verbose cli [
 1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
 1 verbose cli   'C:\\Users\\seksa\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'install',
-1 verbose cli   'multer'
+1 verbose cli   'install'
 1 verbose cli ]
 2 info using npm@4.0.0
 3 info using node@v20.13.1
@@ -15,7 +14,7 @@
 7 verbose stack     at FSReqCallback.oncomplete (node:fs:198:5)
 8 verbose cwd C:\Users\seksa\Documents\GitHub\Books
 9 error Windows_NT 10.0.22631
-10 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\seksa\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "install" "multer"
+10 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\seksa\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "install"
 11 error node v20.13.1
 12 error npm  v4.0.0
 13 error cb.apply is not a function

@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const debug = require('debug')('app');
+const multer = require('multer');
 const productRouters = express.Router();
 
 // Create MySQL connection
@@ -10,6 +11,22 @@ const connection = mysql.createConnection({
     password: '',
     database: 'node_sql'
 });
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
+// Middleware to parse URL-encoded bodies (from HTML forms)
+productRouters.use(express.urlencoded({ extended: true }));
 
 // Route to get all product books from MySQL database and display in "/books"
 productRouters.get('/', (req, res) => {
@@ -81,19 +98,23 @@ productRouters.get('/editBook/:productTitle', (req, res) => {
 });
 
 // Route to handle edit book form submission
-productRouters.post('/editBook/:id', (req, res) => {
+productRouters.post('/editBook/:id', upload.single('image'), (req, res) => {
     const bookId = req.params.id;
     const { productTitle, productDescription, productPrice } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    console.log('Received data for update:', { bookId, productTitle, productDescription, productPrice });
+    const query = image 
+        ? 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, image = ? WHERE id = ?' 
+        : 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE id = ?';
+    const queryParams = image 
+        ? [productTitle, productDescription, productPrice, image, bookId]
+        : [productTitle, productDescription, productPrice, bookId];
 
-    const query = 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE id = ?';
-    connection.query(query, [productTitle, productDescription, productPrice, bookId], (err, result) => {
+    connection.query(query, queryParams, (err, result) => {
         if (err) {
             console.error('Error updating book:', err);
             return res.status(500).json({ error: 'Error updating book' });
         }
-        console.log('Update result:', result);
         res.redirect('/books'); // Redirect to the books list page after successful update
     });
 });
