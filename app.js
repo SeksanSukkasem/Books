@@ -3,7 +3,6 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require("path");
 const mysql = require("mysql");
-const multer = require('multer');
 
 const app = express();
 app.use(express.json());
@@ -36,7 +35,9 @@ app.use('/addBook', productrouter);
 
 
 app.use(express.static(path.join(__dirname, "./public/")));
+app.set("views", path.join(__dirname, "src/views"));
 app.set("views", "./src/views");
+app.set("backend", "./src/backend");
 app.set("view engine", "ejs");
 
 app.get('/books/:title', (req, res) => {

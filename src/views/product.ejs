@@ -71,7 +71,7 @@
         }
 
         .product-item img {
-            max-width: 40vh;
+            max-width: 30vh;
             height: auto;
             border-radius: 5px;
             margin-bottom: 1rem;
@@ -103,7 +103,6 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contact">Contact</a></li>
-                <li><a href="/addBook">Add Book</a></li>
             </ul>
         </nav>
     </header>
@@ -113,7 +112,6 @@
                 <div class="product-item">
                     <img src="<%= products.image %>" alt="<%= products.productTitle %>">
                     <h2><a href="/books/<%= products.productTitle %>"><%= products.productTitle %></a></h2>
-                    <p><strong>Description:</strong> <%= products.productDescription %></p>
                 </div>
             <% }); %>
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Rental Details</title>
+    <title>Online Book Rental</title>
     <style>
         /* Reset CSS */
         * {
@@ -16,8 +16,6 @@
             font-family: Arial, sans-serif;
             line-height: 1.6;
             background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
         }
 
         header {
@@ -27,15 +25,11 @@
             text-align: center;
         }
 
-        header h1 {
-            margin: 0;
-        }
-
         nav ul {
             list-style: none;
             padding: 0;
             text-align: center;
-            margin-top: 1rem;
+            margin: 1rem 0;
         }
 
         nav ul li {
@@ -52,31 +46,37 @@
             padding: 2rem;
         }
 
-        .book-list {
+        .product-list {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
         }
 
-        .book-item {
-            background: #fff;
-            padding: 20px;
+        .product-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 1rem;
             border-radius: 5px;
+            width: 30%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            width: 80%;
+            text-align: center;
         }
 
-        .book-item p {
-            margin-bottom: 10px;
+        .product-item img {
+            max-width: 30vh;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 1rem;
         }
 
-        .book-item p:first-child {
-            font-weight: bold;
+        .product-item h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
         }
 
-        .book-item p:last-child {
-            color: #333;
+        .product-item p {
+            margin: 0.5rem 0;
         }
 
         footer {
@@ -84,19 +84,13 @@
             color: #fff;
             padding: 1rem;
             text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer p {
-            margin: 0;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Online Book Rental Details</h1>
+        <h1>Edit Room</h1>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -105,21 +99,16 @@
             </ul>
         </nav>
     </header>
-
     <main>
-        <div class="book-list">
-            <% dataBooks.forEach(book => { %>
-                <div class="book-item">
-                    <p><%= book.productTitle %></p>
-                    <p>Description: <%= book.productDescription %></p>
-                    <p>Price: <%= book.productPrice %> บาท</p>
-                    <!-- <a class="edit" href="/editBook/<%= book.productTitle %>">Edit</a> -->
+        <div class="product-list">
+            <% product.forEach(products => { %>
+                <div class="product-item">
+                    <img src="<%= products.image %>" alt="<%= products.productTitle %>">
+                    <h2><a href="/backend/editBook/<%= products.productTitle %>"><%= products.productTitle %></a></h2>
                 </div>
-
             <% }); %>
         </div>
     </main>
-
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
     </footer>

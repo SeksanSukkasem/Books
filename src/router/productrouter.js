@@ -36,8 +36,8 @@ productRouters.get('/', (req, res) => {
 });
 
 // Route to render addBook page
-productRouters.get('/addBook', (req, res) => {
-    res.render('Add');
+productRouters.get('/backend/addBook', (req, res) => {
+    res.render('../backend/Add');
 });
 
 // Route to handle addBook form submission
@@ -75,8 +75,19 @@ productRouters.get('/books/:productTitle', (req, res) => {
     });
 });
 
+// Route to render editRoom page
+productRouters.get('/backend/editRoom', (req, res) => {
+    const sql = 'SELECT id, productTitle, productDescription, productPrice, image FROM products';
+    connection.query(sql, (err, data) => {
+        if (err) {
+            return res.json('Error');
+        }
+        res.render('../backend/editRoom', { product: data });
+    });
+});
+
 // Route to render edit book page
-productRouters.get('/editBook/:productTitle', (req, res) => {
+productRouters.get('/backend/editBook/:productTitle', (req, res) => {
     const bookTitle = req.params.productTitle;
     const query = 'SELECT * FROM products WHERE productTitle = ?';
     connection.query(query, [bookTitle], (err, result) => {
@@ -87,12 +98,12 @@ productRouters.get('/editBook/:productTitle', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Book not found' });
         }
-        res.render('editBook', { book: result[0] });
+        res.render('../backend/edit', { book: result[0] });
     });
 });
 
 // Route to handle edit book form submission
-productRouters.post('/editBook/:id', upload.single('image'), (req, res) => {
+productRouters.post('/backend/edit/:id', upload.single('image'), (req, res) => {
     const bookId = req.params.id;
     const { productTitle, productDescription, productPrice } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -109,7 +120,7 @@ productRouters.post('/editBook/:id', upload.single('image'), (req, res) => {
             console.error('Error updating book:', err);
             return res.status(500).json({ error: 'Error updating book' });
         }
-        res.redirect('/books'); // Redirect to the books list page after successful update
+        res.redirect('../backend/editRoom'); // Redirect to the editRoom page after successful update
     });
 });
 
