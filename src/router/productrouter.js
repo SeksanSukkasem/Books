@@ -124,4 +124,19 @@ productRouters.post('/backend/edit/:id', upload.single('image'), (req, res) => {
     });
 });
 
+// Route to handle delete book form submission
+productRouters.post('/deleteBook/:id', (req, res) => {
+    const bookId = req.params.id;
+    const query = 'DELETE FROM products WHERE id = ?';
+
+    connection.query(query, [bookId], (err, result) => {
+        if (err) {
+            console.error('Error deleting book:', err);
+            return res.status(500).json({ error: 'Error deleting book' });
+        }
+        res.redirect('/backend/editRoom'); // Redirect to the editRoom page after successful deletion
+    });
+});
+
+
 module.exports = productRouters;
