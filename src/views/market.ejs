@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .cart-list {
+            margin-top: 20px;
+        }
+
+        .cart-item {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .cart-item p {
+            margin: 5px 0;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Market</h1>
+    </header>
+    <main>
+        <h2>สรุปรายการสั่งซื้อ</h2>
+        <div class="cart-list">
+            <% cart.forEach(item => { %>
+                <div class="cart-item">
+                    <p>ชื่อสินค้า: <%= item.productTitle %></p>
+                    <p>จำนวน: <%= item.quantity %></p>
+                    <p>ราคา: <%= item.productPrice %> บาท</p>
+                    <p>รวม: <%= item.productPrice * item.quantity %> บาท</p>
+                </div>
+            <% }); %>
+        </div>
+        <div class="total">
+            <p>ค่าจัดส่ง: <%= shippingCost %> บาท</p>
+            <p>ราคารวม: <%= total %> บาท</p>
+            <p>ราคาสุทธิ: <%= netTotal %> บาท</p>
+        </div>
+    </main>
+</body>
+</html>

@@ -22,6 +22,8 @@ const storage = multer.diskStorage({
     }
 });
 
+let cart = [];  // Ensure cart array is initialized
+
 const upload = multer({ storage: storage });
 
 // Route to get all product books from MySQL database and display in "/books"
@@ -136,6 +138,33 @@ productRouters.post('/deleteBook/:id', (req, res) => {
         }
         res.redirect('/backend/editRoom'); // Redirect to the editRoom page after successful deletion
     });
+});
+
+// Route to add product to cart
+productRouters.post('/addToCart', (req, res) => {
+    const { id, productTitle, productPrice } = req.body;
+    const product = { id, productTitle, productPrice, quantity: 1 };
+
+    const existingProduct = cart.find(item => item.id === id);
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    res.json({ message: 'Product added to cart', cart });
+});
+
+// Route to display cart
+productRouters.get('/market', (req, res) => {
+    let total = 0;
+    let shippingCost = 50; // Example fixed shipping cost
+    cart.forEach(item => {
+        total += item.productPrice * item.quantity;
+    });
+    let netTotal = total + shippingCost;
+
+    res.render('market', { cart, total, shippingCost, netTotal });
 });
 
 
