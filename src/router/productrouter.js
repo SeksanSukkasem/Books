@@ -44,15 +44,15 @@ productRouters.get('/backend/addBook', (req, res) => {
 
 // Route to handle addBook form submission
 productRouters.post('/addBook', upload.single('image'), (req, res) => {
-    const { productTitle, productDescription, productPrice } = req.body;
+    const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!productTitle || !productDescription || !productPrice || !image) {
+    if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !image) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const query = 'INSERT INTO products (productTitle, productDescription, productPrice, image) VALUES (?, ?, ?, ?)';
-    connection.query(query, [productTitle, productDescription, productPrice, image], (err, results) => {
+    const query = 'INSERT INTO products (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image], (err, results) => {
         if (err) {
             console.error('Error inserting book into database:', err);
             return res.status(500).json({ error: 'Error inserting book into database' });
@@ -140,32 +140,48 @@ productRouters.post('/deleteBook/:id', (req, res) => {
     });
 });
 
-// Route to add product to cart
+// Route to handle addToCart form submission
 productRouters.post('/addToCart', (req, res) => {
-    const { id, productTitle, productPrice } = req.body;
-    const product = { id, productTitle, productPrice, quantity: 1 };
+    const { product_id, product_title, product_price } = req.body;
 
-    const existingProduct = cart.find(item => item.id === id);
-    if (existingProduct) {
-        existingProduct.quantity += 1;
-    } else {
-        cart.push(product);
+    if (!product_id || !product_title || !product_price) {
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
-    res.json({ message: 'Product added to cart', cart });
-});
-
-// Route to display cart
-productRouters.get('/market', (req, res) => {
-    let total = 0;
-    let shippingCost = 50; // Example fixed shipping cost
-    cart.forEach(item => {
-        total += item.productPrice * item.quantity;
+    const query = 'INSERT INTO market (product_id, product_title, product_price, quantity) VALUES (?, ?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1';
+    connection.query(query, [product_id, product_title, product_price], (err, results) => {
+        if (err) {
+            console.error('Error adding to cart:', err);
+            return res.status(500).json({ error: 'Error adding to cart' });
+        }
+        res.json({ message: 'Product added to cart successfully!' });
     });
-    let netTotal = total + shippingCost;
-
-    res.render('market', { cart, total, shippingCost, netTotal });
 });
 
+// Route to render market page
+productRouters.get('/market', (req, res) => {
+    const query = 'SELECT product_title, product_price, quantity FROM market';
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching market data:', err);
+            return res.status(500).json({ error: 'Error fetching market data' });
+        }
+        res.render('market', { cart: results });
+    });
+});
+
+// Route to handle delete book from cart
+productRouters.post('/market/delete/:id', (req, res) => {
+    const bookId = req.params.id;
+    const query = 'DELETE FROM market WHERE id = ?';
+
+    connection.query(query, [bookId], (err, result) => {
+        if (err) {
+            console.error('Error deleting book:', err);
+            return res.status(500).json({ error: 'Error deleting book' });
+        }
+        res.redirect('/market'); // Redirect to the market page after successful deletion
+    });
+});
 
 module.exports = productRouters;

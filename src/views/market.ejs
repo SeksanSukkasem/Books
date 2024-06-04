@@ -17,30 +17,41 @@
             color: #fff;
             padding: 1rem;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         header h1 {
             margin: 0;
         }
 
-        .cart-list {
-            margin-top: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        .cart-item {
-            background-color: #fff;
-            padding: 10px;
+        table, th, td {
             border: 1px solid #ccc;
-            margin-bottom: 10px;
-            border-radius: 5px;
         }
 
-        .cart-item p {
-            margin: 5px 0;
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
         }
 
         .total {
             font-weight: bold;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
         }
     </style>
 </head>
@@ -48,23 +59,47 @@
     <header>
         <h1>Market</h1>
     </header>
+    <section>
+        <a href="/">back</a>
+    </section>
     <main>
-        <h2>สรุปรายการสั่งซื้อ</h2>
-        <div class="cart-list">
-            <% cart.forEach(item => { %>
-                <div class="cart-item">
-                    <p>ชื่อสินค้า: <%= item.productTitle %></p>
-                    <p>จำนวน: <%= item.quantity %></p>
-                    <p>ราคา: <%= item.productPrice %> บาท</p>
-                    <p>รวม: <%= item.productPrice * item.quantity %> บาท</p>
-                </div>
-            <% }); %>
-        </div>
-        <div class="total">
-            <p>ค่าจัดส่ง: <%= shippingCost %> บาท</p>
-            <p>ราคารวม: <%= total %> บาท</p>
-            <p>ราคาสุทธิ: <%= netTotal %> บาท</p>
-        </div>
+        <h2>Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Title</th>
+                    <th>Product Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% let totalPrice = 0; %>
+                <% cart.forEach(item => { %>
+
+                    <% totalPrice += item.product_price * item.quantity; %>
+                    <tr>
+                        
+                        <td><%= item.product_title %></td>
+                        <td><%= item.product_price %> บาท</td>
+                        <td><%= item.quantity %></td>
+                        <td><%= item.product_price * item.quantity %> บาท</td>
+                    </tr>
+                    <td>
+                        <form action="/market/delete/<%= item.id %>" method="POST" style="display:inline;">
+                            <button class="btn-delete" type="submit">Delete</button>
+                        </form>
+                    </td>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <p class="total">Total Price: <%= totalPrice %> บาท</p>
+        <p class="buy">Buy</p>
     </main>
+
+    <footer>
+        <p>&copy; 2024 Online Book Rental</p>
+    </footer>
 </body>
 </html>

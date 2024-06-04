@@ -64,19 +64,60 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            width: 80%;
+            width: 100%;
+            max-width: 800px;
         }
 
-        .book-item p {
+        .book-item h2 {
             margin-bottom: 10px;
-        }
-
-        .book-item p:first-child {
-            font-weight: bold;
-        }
-
-        .book-item p:last-child {
+            font-size: 1.5rem;
             color: #333;
+        }
+
+        .book-item .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .book-item .details p {
+            margin: 0;
+            color: #666;
+        }
+
+        .book-item .details p span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .book-item .price {
+            font-size: 1.2rem;
+            color: #000;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .book-item img {
+            max-width: 20%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
         }
 
         footer {
@@ -109,13 +150,24 @@
     <main>
         <div class="book-list">
             <% dataBooks.forEach(book => { %>
-                <div class="book-item">
-                    <p><%= book.productTitle %></p>
-                    <p>Description: <%= book.productDescription %></p>
-                    <p>Price: <%= book.productPrice %> บาท</p>
-                    <!-- <a class="edit" href="/editBook/<%= book.productTitle %>">Edit</a> -->
-                </div>
+                <div class="book-item" data-id="<%= book.id %>" data-title="<%= book.productTitle %>" data-price="<%= book.productPrice %>">
+                    <img src="<%= book.image %>" alt="<%= book.productTitle %>">
+                    <h2><%= book.productTitle %></h2>
 
+                    <p><%= book.productDescription %></p><br>
+                    <div class="details">
+                        <p><span>Author:</span> <%= book.author %></p>
+                        <p><span>Publisher:</span> <%= book.publisher %></p>
+                        <p><span>Category:</span> <%= book.category %></p>
+                        <p><span>Pages:</span> <%= book.pages %></p>
+                        <p><span>Product Type:</span> <%= book.productType %></p>
+                        <p><span>Size:</span> <%= book.size %></p>
+                        <p><span>Weight:</span> <%= book.weight %></p>
+                        <p><span>Barcode:</span> <%= book.barcode %></p>
+                    </div>
+                    <p class="price">Price: <%= book.productPrice %> บาท</p>
+                    <button class="btn addToCart">Add to Cart</button>
+                </div>
             <% }); %>
         </div>
     </main>
@@ -124,4 +176,38 @@
         <p>&copy; 2024 Online Book Rental</p>
     </footer>
 </body>
+<script>
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const productItem = this.closest('.book-item');
+            const productId = productItem.getAttribute('data-id');
+            const productTitle = productItem.querySelector('h2').innerText;
+            const productPrice = productItem.querySelector('.price').innerText.split(' ')[1];
+
+            const data = {
+                product_id: productId,
+                product_title: productTitle,
+                product_price: productPrice
+            };
+
+            fetch('/addToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    console.log(data.message);
+                    alert('Product added to cart successfully!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
 </html>
