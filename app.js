@@ -3,30 +3,31 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require("path");
 const mysql = require("mysql");
-
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Serve static files from the src/image directory
 app.use('/uploads', express.static(path.join(__dirname, 'src', 'image')));
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'node_sql'
-});
+// // Create MySQL connection
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'node_sql'
+// });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
-    }
-    console.log('Connected to the MySQL server.');
+// // Connect to MySQL
+// connection.connect((err) => {
+//     if (err) {
+//         console.error('Error connecting to the database:', err);
+//         return;
+//     }
+//     console.log('Connected to the MySQL server.');
+// });
 
-});
-
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const productrouter = require("./src/router/productrouter");
 
 app.use(morgan('combined'));

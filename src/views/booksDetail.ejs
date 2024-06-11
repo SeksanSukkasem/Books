@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Rental Details</title>
-    <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Online Book Rental Details</title>
+        <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet">
+        <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -52,12 +48,6 @@
             padding: 2rem;
         }
 
-        .book-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
         .book-item {
             background: #fff;
             padding: 20px;
@@ -65,19 +55,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             width: 100%;
-            max-width: 800px;
         }
 
         .book-item h2 {
             margin-bottom: 10px;
             font-size: 1.5rem;
             color: #333;
-        }
-
-        .book-item .details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
         }
 
         .book-item .details p {
@@ -98,7 +81,7 @@
         }
 
         .book-item img {
-            max-width: 20%;
+            max-width: 150px;
             height: auto;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -116,98 +99,133 @@
             cursor: pointer;
         }
 
-        .btn:hover {
-            background-color: #45a049;
-        }
-
         footer {
             background-color: #333;
             color: #fff;
             padding: 1rem;
             text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            margin-top: 20px;
         }
 
         footer p {
             margin: 0;
         }
+
+        .btn-back {
+            background-color: #333;
+            margin-bottom: 20px;
+        }
     </style>
-</head>
-<body>
-    <header>
-        <h1>Online Book Rental Details</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    </head>
 
-    <main>
-        <div class="book-list">
-            <% dataBooks.forEach(book => { %>
-                <div class="book-item" data-id="<%= book.id %>" data-title="<%= book.productTitle %>" data-price="<%= book.productPrice %>">
-                    <img src="<%= book.image %>" alt="<%= book.productTitle %>">
-                    <h2><%= book.productTitle %></h2>
-
-                    <p><%= book.productDescription %></p><br>
-                    <div class="details">
-                        <p><span>Author:</span> <%= book.author %></p>
-                        <p><span>Publisher:</span> <%= book.publisher %></p>
-                        <p><span>Category:</span> <%= book.category %></p>
-                        <p><span>Pages:</span> <%= book.pages %></p>
-                        <p><span>Product Type:</span> <%= book.productType %></p>
-                        <p><span>Size:</span> <%= book.size %></p>
-                        <p><span>Weight:</span> <%= book.weight %></p>
-                        <p><span>Barcode:</span> <%= book.barcode %></p>
+    <body>
+        <header>
+            <h1>Online Book Rental Details</h1>
+            <nav>
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="/market">Market</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section class="container mt-3">
+            <a href="/" class="btn btn-secondary btn-back">Back</a>
+        </section>
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <% dataBooks.forEach(book => { %>
+                        <div class="book-item" data-id="<%= book.id %>">
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <img src="<%= book.image %>"
+                                        alt="<%= book.productTitle %>">
+                                </div>
+                                <div class="col-md-8">
+                                    <h2><%= book.productTitle %></h2>
+                                    <p><%= book.productDescription %></p>
+                                    <div class="details row">
+                                        <p class="col-md-6"><span>Author:</span>
+                                            <%= book.author %></p>
+                                        <p
+                                            class="col-md-6"><span>Publisher:</span>
+                                            <%= book.publisher %></p>
+                                        <p
+                                            class="col-md-6"><span>Category:</span>
+                                            <%= book.category %></p>
+                                        <p class="col-md-6"><span>Pages:</span>
+                                            <%= book.pages %></p>
+                                        <p class="col-md-6"><span>Product
+                                                Type:</span> <%=
+                                            book.productType %></p>
+                                        <p class="col-md-6"><span>Size:</span>
+                                            <%= book.size %></p>
+                                        <p class="col-md-6"><span>Weight:</span>
+                                            <%= book.weight %></p>
+                                        <p
+                                            class="col-md-6"><span>Barcode:</span>
+                                            <%= book.barcode %></p>
+                                    </div>
+                                    <div class="price">Price: <%=
+                                        book.productPrice %> บาท</p>
+                                    <button class="btn addToCart">Add to
+                                        Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
                     </div>
-                    <p class="price">Price: <%= book.productPrice %> บาท</p>
-                    <button class="btn addToCart">Add to Cart</button>
                 </div>
-            <% }); %>
-        </div>
-    </main>
+            </div>
+        </main>
 
-    <footer>
-        <p>&copy; 2024 Online Book Rental</p>
-    </footer>
-</body>
-<script>
-    document.querySelectorAll('.btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const productItem = this.closest('.book-item');
-            const productId = productItem.getAttribute('data-id');
-            const productTitle = productItem.querySelector('h2').innerText;
-            const productPrice = productItem.querySelector('.price').innerText.split(' ')[1];
+        <footer>
+            <p>&copy; 2024 Online Book Rental</p>
+        </footer>
 
-            const data = {
-                product_id: productId,
-                product_title: productTitle,
-                product_price: productPrice
-            };
-
-            fetch('/addToCart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    console.error('Error:', data.error);
-                } else {
-                    console.log(data.message);
-                    alert('Product added to cart successfully!');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    });
-</script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+                document.querySelectorAll('.btn.addToCart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productItem = this.closest('.book-item');
+                        const productId = productItem.getAttribute('data-id');
+                        const productTitle = productItem.querySelector('h2').innerText;
+                        const productPrice = productItem.querySelector('.price').innerText.split(' ')[1];
+                        const data = {
+                            product_id: productId,
+                            product_title: productTitle,
+                            product_price: productPrice
+                        };
+                        fetch('/addToCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                console.error('Error:', data.error);
+                            } else {
+                                console.log(data.message);
+                                alert('Product added to cart successfully!');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    });
+                });
+            </script>
+    </body>
 </html>

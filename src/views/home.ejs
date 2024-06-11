@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Rental Details</title>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Online Book Rental Details</title>
+        <style>
         /* Reset CSS */
         * {
             margin: 0;
@@ -93,33 +93,38 @@
             margin: 0;
         }
     </style>
-</head>
-<body>
-    <header>
-        <h1>Online Book Rental Details</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/addBook">Add Book</a></li>
-            </ul>
-        </nav>
-    </header>
+    </head>
+    <body>
+        <header>
+            <h1>Online Book Rental Details</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/addBook">Add Book</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <main>
-        <div class="book-list">
-            <% dataBooks.forEach(book => { %>
+        <main>
+            <div class="book-list">
+                <% dataBooks.forEach(book => { %>
                 <div class="book-item">
                     <p><%= book.productTitle %></p>
                     <p>Description: <%= book.productDescription %></p>
                 </div>
-            <% }); %>
-        </div>
-    </main>
+                <% }); %>
+            </div>
+        </main>
 
-    <footer>
-        <p>&copy; 2024 Online Book Rental</p>
-    </footer>
-</body>
+        <footer>
+            <p>&copy; 2024 Online Book Rental</p>
+        </footer>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </html>

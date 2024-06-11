@@ -12,6 +12,15 @@ const connection = mysql.createConnection({
     database: 'node_sql'
 });
 
+// Connect to MySQL
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err);
+        return;
+    }
+    console.log('Connected to the MySQL server.');
+});
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -21,8 +30,6 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-
-let cart = [];  // Ensure cart array is initialized
 
 const upload = multer({ storage: storage });
 
@@ -36,6 +43,7 @@ productRouters.get('/', (req, res) => {
         res.render('product', { product: data });
     });
 });
+
 
 // Route to render addBook page
 productRouters.get('/backend/addBook', (req, res) => {
@@ -136,7 +144,7 @@ productRouters.post('/deleteBook/:id', (req, res) => {
             console.error('Error deleting book:', err);
             return res.status(500).json({ error: 'Error deleting book' });
         }
-        res.redirect('/backend/editRoom'); // Redirect to the editRoom page after successful deletion
+        res.redirect('../backend/editRoom'); // Redirect to the editRoom page after successful deletion
     });
 });
 
@@ -147,7 +155,7 @@ productRouters.post('/addToCart', (req, res) => {
     if (!product_id || !product_title || !product_price) {
         return res.status(400).json({ error: 'All fields are required' });
     }
-
+    
     const query = 'INSERT INTO market (product_id, product_title, product_price, quantity) VALUES (?, ?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1';
     connection.query(query, [product_id, product_title, product_price], (err, results) => {
         if (err) {
@@ -156,11 +164,13 @@ productRouters.post('/addToCart', (req, res) => {
         }
         res.json({ message: 'Product added to cart successfully!' });
     });
+   
 });
+
 
 // Route to render market page
 productRouters.get('/market', (req, res) => {
-    const query = 'SELECT product_title, product_price, quantity FROM market';
+    const query = 'SELECT id, product_title, product_price, quantity FROM market';
     connection.query(query, (err, results) => {
         if (err) {
             console.error('Error fetching market data:', err);
@@ -170,7 +180,7 @@ productRouters.get('/market', (req, res) => {
     });
 });
 
-// Route to handle delete book from cart
+// Route to handle deleting a product from the market
 productRouters.post('/market/delete/:id', (req, res) => {
     const bookId = req.params.id;
     const query = 'DELETE FROM market WHERE id = ?';
@@ -183,5 +193,7 @@ productRouters.post('/market/delete/:id', (req, res) => {
         res.redirect('/market'); // Redirect to the market page after successful deletion
     });
 });
+
+
 
 module.exports = productRouters;
