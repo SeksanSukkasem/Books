@@ -90,10 +90,10 @@
             justify-content: space-between;
             background-color: #fff;
             padding: 1rem;
-            text-align: center;
             margin-bottom: 1rem;
             width: 100%;
             max-width: 200px;
+            position: relative;
         }
 
         .product-item img {
@@ -109,7 +109,8 @@
 
         .product-item h2 a {
             text-decoration: none;
-            color: black;
+            color: rgb(88, 86, 86);
+            font-size: medium;
         }
 
         .product-item .btn {
@@ -150,7 +151,7 @@
         }
 
         .carousel-item img {
-            width: 800px;
+            width: 900px;
             height: 400px;
             object-fit: cover;
             border: none;
@@ -177,6 +178,28 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .top-rank {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff5733;
+            color: #fff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            padding: 5px;
+            font-size: 0.9rem;
+            border-radius: 5px;
         }
 
         footer {
@@ -206,8 +229,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/market">Market
                                 <span class="cart-count" id="cart-count">0</span>
-                            </a>
-                        </li>
+                            </a></li>
                     </ul>
                 </div>
             </nav>
@@ -247,31 +269,16 @@
             </div>
 
             <h3>Best Selling Books</h3>
-            <div id="bestSellingCarousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <% bestSelling.forEach((book, index) => { %>
-                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                        <div class="d-flex justify-content-center">
-                            <div class="product-item">
-                                <img src="<%= book.image %>" alt="<%= book.productTitle %>">
-                                <h2><a href="/books/<%= book.productTitle %>"><strong><%= book.productTitle %></strong></a></h2>
-                                <p><%= book.author %></p>
-                                <p><%= book.productType %></p>
-                                <div class="price"><%= book.productPrice %> บาท</div>
-                                <button class="btn addToCart">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    <% }); %>
+            <div class="row product-list best-selling-books">
+                <% bestSelling.forEach((book, index) => { %>
+                <div class="col-sm-6 col-md-4 col-lg-3 product-item" data-id="<%= book.id %>"
+                    data-title="<%= book.productTitle %>" data-price="<%= book.productPrice %>"
+                    data-category="<%= book.category %>">
+                    <span class="top-rank">TOP <%= index + 1 %></span>
+                    <img src="<%= book.image %>" alt="<%= book.productTitle %>">
+                    <h2><a href="/books/<%= book.productTitle %>"><strong><%= book.productTitle %></strong></a></h2>
                 </div>
-                <a class="carousel-control-prev" href="#bestSellingCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#bestSellingCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                <% }); %>
             </div>
 
             <h3>All Books</h3>
@@ -280,6 +287,11 @@
                 <div class="col-sm-6 col-md-4 col-lg-3 product-item" data-id="<%= products.id %>"
                     data-title="<%= products.productTitle %>" data-price="<%= products.productPrice %>"
                     data-category="<%= products.category %>">
+                    
+                    <% if (products.discount > 0) { %>
+                    <div class="discount-badge">ลด <%= products.discount %>%</div>
+                    <% } %>
+                    
                     <img src="<%= products.image %>" alt="<%= products.productTitle %>">
                     <h2><a href="/books/<%= products.productTitle %>"><strong><%= products.productTitle %></strong></a></h2>
                     <p><%= products.author %></p>
@@ -299,7 +311,6 @@
                         <img src="<%= products.image %>" alt="<%= products.productTitle %>">
                         <h2><a href="/books/<%= products.productTitle %>"><strong><%= products.productTitle %></strong></a></h2>
                         <p><%= products.author %></p>
-                        <p><%= products.productType %></p>
                         <div class="price"><%= products.productPrice %> บาท</div>
                         <button class="btn addToCart">Add to Cart</button>
                     </div>
@@ -379,5 +390,4 @@
         });
     </script>
 </body>
-
 </html>

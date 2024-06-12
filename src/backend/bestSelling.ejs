@@ -3,29 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Selling Books</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Online Book Rental - Add Book</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-back {
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 10px;
+            background-color: #555;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #777;
+        }
+    </style>
 </head>
 <body>
-    <header class="header text-center">
-        <h1>Best Selling Books</h1>
+    <header>
+        <h1>Add Book</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/backend/addBook">Add Book</a></li>
+            </ul>
+        </nav>
     </header>
-    <main class="container my-4">
-        <div class="row">
-            <% books.forEach(book => { %>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card mb-4">
-                        <img src="<%= book.image %>" class="card-img-top" alt="<%= book.productTitle %>">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= book.productTitle %></h5>
-                            <p class="card-text">Author: <%= book.author %></p>
-                            <p class="card-text">Price: <%= book.productPrice %> บาท</p>
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
-            <% }) %>
-        </div>
+
+    <div class="container">
+        <a href="../backend" class="btn-back">Back</a>
+    </div>
+
+    <main>
+        <form id="bookForm" enctype="multipart/form-data">
+            <label for="productTitle">หนังสือ:</label>
+            <input type="text" id="productTitle" name="productTitle" required>
+
+            <label for="productDescription">รายละเอียดหนังสือ:</label>
+            <textarea id="productDescription" name="productDescription" required></textarea>
+
+            <label for="author">ผู้เขียน:</label>
+            <input type="text" id="author" name="author" required>
+
+            <label for="publisher">สำนักพิมพ์:</label>
+            <input type="text" id="publisher" name="publisher" required>
+
+            <label for="category">หมวดหมู่:</label>
+            <input type="text" id="category" name="category" required>
+
+            <label for="pages">จำนวนหน้า:</label>
+            <input type="number" id="pages" name="pages" required>
+
+            <label for="productType">ประเภทสินค้า:</label>
+            <input type="text" id="productType" name="productType" required>
+
+            <label for="size">ขนาด:</label>
+            <input type="text" id="size" name="size" required>
+
+            <label for="weight">น้ำหนัก:</label>
+            <input type="text" id="weight" name="weight" required>
+
+            <label for="barcode">บาร์โค้ด:</label>
+            <input type="text" id="barcode" name="barcode" required>
+
+            <label for="productPrice">ราคา:</label>
+            <input type="number" id="productPrice" name="productPrice" required>
+
+            <label for="soldCount">Sold Count:</label>
+            <input type="number" id="soldCount" name="soldCount" required>
+
+            <label for="image">รูปภาพ:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+
+            <button type="submit">Submit</button>
+            <button type="button" id="clearForm">Clear</button>
+        </form>
+        <div id="message"></div> <!-- Message container -->
     </main>
+    
+    <footer>
+        <p>&copy; 2024 Online Book Rental</p>
+    </footer>
+
+    <script>
+        // Handle form submission
+        document.getElementById('bookForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formElement = document.getElementById('bookForm');
+            const formData = new FormData(formElement);
+
+            // Send form data to server
+            fetch('/backend/bestSelling', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageElement = document.getElementById('message');
+                if (data.error) {
+                    messageElement.style.color = 'red';
+                    messageElement.textContent = data.error;
+                } else {
+                    messageElement.style.color = 'green';
+                    messageElement.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const messageElement = document.getElementById('message');
+                messageElement.style.color = 'red';
+                messageElement.textContent = 'An error occurred while adding the book.';
+            });
+        });
+
+        // Handle clear form
+        document.getElementById('clearForm').addEventListener('click', function () {
+            document.getElementById('bookForm').reset();
+            document.getElementById('message').textContent = '';
+        });
+    </script>
 </body>
 </html>

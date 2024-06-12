@@ -39,8 +39,8 @@ const upload = multer({ storage: storage });
 
 // Route to get all product books from MySQL database and display in "/books"
 productRouters.get('/', (req, res) => {
-    const productQuery = 'SELECT id, productTitle, author, productType, productPrice, image, category FROM products';
-    const bestSellingQuery = 'SELECT id, productTitle, author, productType, productPrice, image, category FROM products WHERE bestSelling = 1';
+    const productQuery = 'SELECT id, productTitle, author, productType, productPrice, image, category, discount FROM products';
+    const bestSellingQuery = 'SELECT id, productTitle, author, productType, productPrice, image, category FROM bestSelling ORDER BY soldCount DESC';
     const newBooksQuery = 'SELECT id, image FROM newbook';
     const categoryQuery = 'SELECT DISTINCT category FROM products';
 
@@ -82,6 +82,7 @@ productRouters.get('/', (req, res) => {
 
 
 
+
 // Route to render addBook page
 productRouters.get('/backend/addBook', (req, res) => {
     res.render('../backend/Add');
@@ -89,15 +90,15 @@ productRouters.get('/backend/addBook', (req, res) => {
 
 // Route to handle addBook form submission
 productRouters.post('/addBook', upload.single('image'), (req, res) => {
-    const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice } = req.body;
+    const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, discount } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !image) {
+    if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !discount || !image) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const query = 'INSERT INTO products (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image], (err, results) => {
+    const query = 'INSERT INTO products (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, discount, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, discount, image], (err, results) => {
         if (err) {
             console.error('Error inserting book into database:', err);
             return res.status(500).json({ error: 'Error inserting book into database' });
@@ -338,43 +339,54 @@ productRouters.post('/market/delete/:id', (req, res) => {
 });
 
 
-productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) => {
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
-
-    if (!image) {
-        return res.status(400).json({ error: 'Image is required' });
-    }
-
-    const query = 'INSERT INTO newBook (image) VALUES (?)';
-    connection.query(query, [image], (err, results) => {
+productRouters.get('/backend/bestSelling', (req, res) => {
+    const query = 'SELECT * FROM bestSelling ORDER BY soldCount DESC';
+    connection.query(query, (err, results) => {
         if (err) {
-            console.error('Error inserting image into database:', err);
-            return res.status(500).json({ error: 'Error inserting image into database' });
+            console.error('Error fetching best-selling books:', err);
+            return res.status(500).json({ error: 'Error fetching best-selling books' });
         }
-        res.json({ message: 'Image added successfully!' });
+        res.render('../backend/bestSelling', { bestSelling: results });
     });
 });
 
 
+// productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) => {
+//     const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, soldCount } = req.body;
+//     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-productRouters.get('/backend/newsBooks', (req, res) => {
-    res.render('../backend/newsBooks');
-});
+//     if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !soldCount || !image) {
+//         return res.status(400).json({ error: 'All fields are required' });
+//     }
 
-productRouters.post('/backend/newsBooks', upload.single('image'), (req, res) => {
+//     const query = 'INSERT INTO bestSelling (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+//     connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount], (err, results) => {
+//         if (err) {
+//             console.error('Error inserting book into database:', err);
+//             return res.status(500).json({ error: 'Error inserting book into database' });
+//         }
+//         res.json({ message: 'Best-selling book added successfully!' });
+//     });
+// });
+
+
+
+// Handle form submission for adding a new book
+productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) => {
+    const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, soldCount } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!image) {
-        return res.status(400).json({ error: 'Image is required' });
+    if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !soldCount || !image) {
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const query = 'INSERT INTO newBook (image) VALUES (?)';
-    connection.query(query, [image], (err, results) => {
+    const query = 'INSERT INTO bestSelling (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount], (err, results) => {
         if (err) {
-            console.error('Error inserting image into database:', err);
-            return res.status(500).json({ error: 'Error inserting image into database' });
+            console.error('Error inserting book into database:', err);
+            return res.status(500).json({ error: 'Error inserting book into database' });
         }
-        res.json({ message: 'Image added successfully!' });
+        res.json({ message: 'Best-selling book added successfully!' });
     });
 });
 
