@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Book Rental</title>
+    <title>Online Book Rental - Add Book</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             background-color: #f4f4f4;
             padding: 20px;
         }
@@ -29,6 +22,23 @@
 
         header h1 {
             margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
         }
 
         main {
@@ -49,8 +59,7 @@
             margin: 10px 0 5px;
         }
 
-        input,
-        textarea {
+        input, textarea {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -65,6 +74,7 @@
             background-color: #333;
             color: #fff;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         button:hover {
@@ -84,32 +94,18 @@
             margin-top: 20px;
         }
 
-        nav ul li a {
+        .btn-back {
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 10px;
+            background-color: #555;
             color: #fff;
+            border-radius: 5px;
             text-decoration: none;
         }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 1rem;
+        .btn-back:hover {
+            background-color: #777;
         }
     </style>
 </head>
@@ -125,6 +121,10 @@
             </ul>
         </nav>
     </header>
+
+    <div class="container">
+        <a href="../backend" class="btn-back">Back</a>
+    </div>
 
     <main>
         <form id="bookForm" enctype="multipart/form-data">
@@ -165,9 +165,11 @@
             <input type="file" id="image" name="image" accept="image/*" required>
 
             <button type="submit">Submit</button>
+            <button type="button" id="clearForm">Clear</button>
         </form>
         <div id="message"></div> <!-- Message container -->
     </main>
+    
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
     </footer>
@@ -202,6 +204,12 @@
                 messageElement.style.color = 'red';
                 messageElement.textContent = 'An error occurred while adding the book.';
             });
+        });
+
+        // Handle clear form
+        document.getElementById('clearForm').addEventListener('click', function () {
+            document.getElementById('bookForm').reset();
+            document.getElementById('message').textContent = '';
         });
     </script>
 </body>

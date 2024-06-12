@@ -2,13 +2,19 @@ const express = require('express');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require("path");
-const mysql = require("mysql");
 const app = express();
+const QRCode = require('qrcode');
+const generatePayload = require('promptpay-qr');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const _ = require('lodash');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Serve static files from the src/image directory
 app.use('/uploads', express.static(path.join(__dirname, 'src', 'image')));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // // Create MySQL connection
 // const connection = mysql.createConnection({
@@ -45,7 +51,36 @@ app.get('/books/:title', (req, res) => {
     const title = req.params.title;
     res.render('booksDetail', { title });
 });
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+app.post('/generateQR', (req, res) => {
+    const amount = parseFloat(_.get(req, ["body", "amount"]));
+    const mobileNumber = '0123456789'; // เปลี่ยนเป็นเบอร์โทรของคุณ
+    const payload = generatePayload(mobileNumber, { amount });
+    const option = {
+        color: {
+            dark: '#000', // สีของ QR code
+            light: '#fff' // สีพื้นหลัง
+        }
+    };
+    QRCode.toDataURL(payload, option, (err, url) => {
+        if (err) {
+            console.log('Failed to generate QR code', err);
+            return res.status(400).json({
+                RespCode: 400,
+                RespMessage: 'Error: ' + err
+            });
+        } else {
+            return res.status(200).json({
+                RespCode: 200,
+                RespMessage: 'Success',
+                Result: url
+            });
+        }
+    });
+});
 app.listen(port, async () => {
     const chalk = await import('chalk');
     debug("Listening on port " + chalk.default.green(port));

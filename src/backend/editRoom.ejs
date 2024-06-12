@@ -1,61 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Room - Online Book Rental</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             background-color: #f4f4f4;
-            padding: 20px;
+            padding-top: 70px;
         }
 
         header {
             background-color: #333;
             color: #fff;
             padding: 1rem;
-            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 10%;
+            z-index: 1000;
         }
 
-        header h1 {
+        .header-title {
             margin: 0;
         }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-            text-align: center;
-            margin: 1rem 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 1rem;
-        }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        main {
-            padding: 2rem;
-        }
-
-        .product-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
+        .navbar-nav .nav-link {
+            color: #fff !important;
         }
 
         .product-item {
@@ -63,10 +37,13 @@
             border: 1px solid #ccc;
             padding: 1rem;
             border-radius: 5px;
-            width: calc(33.333% - 2rem);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            position: relative;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
         }
 
         .product-item img {
@@ -81,12 +58,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .product-item p {
-            margin: 0.5rem 0;
-        }
-
         .product-item .btn {
-            display: inline-block;
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 5px;
@@ -106,10 +78,6 @@
             color: #fff;
         }
 
-        .product-item form {
-            display: inline;
-        }
-
         footer {
             background-color: #333;
             color: #fff;
@@ -117,35 +85,52 @@
             text-align: center;
             margin-top: 2rem;
         }
+
+        .btn-back {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
+
 <body>
     <header>
-        <h1>Edit Room</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <h1 class="header-title">Edit Room</h1>
+            <nav class="navbar navbar-expand-lg navbar-dark">
+            </nav>
+        </div>
     </header>
-    <main>
-        <div class="product-list">
+
+    <div class="container my-4">
+        <a href="../backend" class="btn btn-secondary btn-back">Back</a>
+    </div>
+
+    <main class="container mt-5">
+        <div class="row">
             <% product.forEach(products => { %>
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="product-item">
                     <img src="<%= products.image %>" alt="<%= products.productTitle %>">
                     <h2><a href="/backend/editBook/<%= products.productTitle %>"><%= products.productTitle %></a></h2>
-                    <form action="/deleteBook/<%= products.id %>" method="POST">
-                        <button type="submit" class="btn delete-btn">DELETE</button>
-                    </form>
-                    <a href="/backend/editBook/<%= products.productTitle %>" class="btn edit-btn">Edit</a>
+                    <div class="d-flex justify-content-between">
+                        <form action="/deleteBook/<%= products.id %>" method="POST" class="flex-fill mr-1">
+                            <button type="submit" class="btn delete-btn btn-block">DELETE</button>
+                        </form>
+                        <a href="/backend/editBook/<%= products.productTitle %>" class="btn edit-btn flex-fill ml-1 btn-block">Edit</a>
+                    </div>
                 </div>
+            </div>
             <% }); %>
         </div>
     </main>
+
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

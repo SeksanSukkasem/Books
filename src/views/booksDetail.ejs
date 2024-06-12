@@ -115,6 +115,18 @@
             background-color: #333;
             margin-bottom: 20px;
         }
+        .cart-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
     </head>
 
@@ -129,8 +141,12 @@
                             href="/about">About Us</a></li>
                     <li class="nav-item"><a class="nav-link text-white"
                             href="/contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                            href="/market">Market</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/market">Market
+                            <span class="cart-count"
+                                id="cart-count">0</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -202,11 +218,13 @@
                         const productId = productItem.getAttribute('data-id');
                         const productTitle = productItem.querySelector('h2').innerText;
                         const productPrice = productItem.querySelector('.price').innerText.split(' ')[1];
+        
                         const data = {
                             product_id: productId,
                             product_title: productTitle,
                             product_price: productPrice
                         };
+        
                         fetch('/addToCart', {
                             method: 'POST',
                             headers: {
@@ -220,12 +238,20 @@
                                 console.error('Error:', data.error);
                             } else {
                                 console.log(data.message);
-                                alert('Product added to cart successfully!');
+                                document.getElementById('cart-count').innerText = data.totalQuantity;
                             }
                         })
                         .catch(error => console.error('Error:', error));
                     });
                 });
+        
+                // Fetch and update the cart count on page load
+                fetch('/market/count')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('cart-count').innerText = data.totalQuantity;
+                    })
+                    .catch(error => console.error('Error fetching cart count:', error));
             </script>
     </body>
 </html>
