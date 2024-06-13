@@ -44,6 +44,7 @@ productRouters.get('/', (req, res) => {
     const newBooksQuery = 'SELECT id, image FROM newbook';
     const categoryQuery = 'SELECT DISTINCT category FROM products';
 
+
     connection.query(productQuery, (err, productData) => {
         if (err) {
             console.error('Error fetching products:', err);
@@ -67,11 +68,13 @@ productRouters.get('/', (req, res) => {
                         console.error('Error fetching categories:', err);
                         return res.status(500).send('Error fetching categories');
                     }
+
                     res.render('product', {
                         product: productData,
                         bestSelling: bestSellingData,
                         newBooks: newBooksData,
-                        categories: categoryData
+                        categories: categoryData,
+
                     });
                 });
             });
@@ -111,6 +114,7 @@ productRouters.post('/addBook', upload.single('image'), (req, res) => {
 productRouters.get('/books/:productTitle', (req, res) => {
     const bookTitle = req.params.productTitle;
     const query = 'SELECT * FROM products WHERE productTitle = ?';
+    const productRandomQuery = 'SELECT id, productTitle, author, productType, productPrice, image, category, discount FROM products ORDER BY RAND() LIMIT 5';
     connection.query(query, [bookTitle], (err, result) => {
         if (err) {
             console.error('Error fetching book details:', err);
@@ -119,7 +123,18 @@ productRouters.get('/books/:productTitle', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Book not found' });
         }
-        res.render('booksDetail', { dataBooks: result });
+        connection.query(productRandomQuery, (err, productRandomData) => {
+            if (err) {
+                console.error('Error fetching random products:', err);
+                return res.status(500).send('Error fetching random products');
+            }
+            res.render('booksDetail',
+                {
+                    dataBooks: result,
+                    productrandom: productRandomData
+
+                });
+        });
     });
 });
 
@@ -208,10 +223,10 @@ productRouters.post('/backend/edit/:id', upload.single('image'), (req, res) => {
     const { productTitle, productDescription, productPrice } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    const query = image 
-        ? 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, image = ? WHERE id = ?' 
+    const query = image
+        ? 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, image = ? WHERE id = ?'
         : 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE id = ?';
-    const queryParams = image 
+    const queryParams = image
         ? [productTitle, productDescription, productPrice, image, bookId]
         : [productTitle, productDescription, productPrice, bookId];
 
@@ -251,7 +266,7 @@ productRouters.post('/addToCart', (req, res) => {
             console.error('Error adding to cart:', err);
             return res.status(500).json({ error: 'Error adding to cart' });
         }
-        
+
         // Get the total count of items in the cart
         const countQuery = 'SELECT SUM(quantity) as totalQuantity FROM market';
         connection.query(countQuery, (err, countResult) => {
@@ -284,7 +299,7 @@ productRouters.get('/market/count', (req, res) => {
 //     if (!product_id || !product_title || !product_price) {
 //         return res.status(400).json({ error: 'All fields are required' });
 //     }
-    
+
 //     const query = 'INSERT INTO market (product_id, product_title, product_price, quantity) VALUES (?, ?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1';
 //     connection.query(query, [product_id, product_title, product_price], (err, results) => {
 //         if (err) {
@@ -293,7 +308,7 @@ productRouters.get('/market/count', (req, res) => {
 //         }
 //         res.json({ message: 'Product added to cart successfully!' });
 //     });
-   
+
 // });
 
 
