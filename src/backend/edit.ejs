@@ -149,10 +149,7 @@
             <input type="number" id="productPrice" name="productPrice" value="<%= book.productPrice %>" required>
 
             <label for="discount">Discount (%):</label>
-            <% if (book.discount > 0) { %>
-                <div class="discount-badge">ลด <%= book.discount %>%</div>
-            <% } %>
-            <input type="number" id="discount" name="discount" value="<%= book.discount %>" step="0.01">
+            <input type="number" id="discount" name="discount" value="<%= book.discount %>" required>
 
             <label for="image">Image:</label>
             <% if (book.image) { %>

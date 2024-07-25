@@ -46,11 +46,17 @@ app.set("views", path.join(__dirname, "src/views"));
 app.set("views", "./src/views");
 app.set("backend", "./src/backend");
 app.set("view engine", "ejs");
+const productRouter = require('./src/router/productrouter');
+app.use('/', productRouter);
+app.use('/addBook', productRouter);
+
 
 app.get('/books/:title', (req, res) => {
     const title = req.params.title;
     res.render('booksDetail', { title });
 });
+
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

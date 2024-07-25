@@ -220,22 +220,22 @@ productRouters.get('/backend/editBook/:productTitle', (req, res) => {
 // Route to handle edit book form submission
 productRouters.post('/backend/edit/:id', upload.single('image'), (req, res) => {
     const bookId = req.params.id;
-    const { productTitle, productDescription, productPrice } = req.body;
+    const { productTitle, productDescription, productPrice, discount } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     const query = image
-        ? 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, image = ? WHERE id = ?'
-        : 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ? WHERE id = ?';
+        ? 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, discount = ?, image = ? WHERE id = ?'
+        : 'UPDATE products SET productTitle = ?, productDescription = ?, productPrice = ?, discount = ? WHERE id = ?';
     const queryParams = image
-        ? [productTitle, productDescription, productPrice, image, bookId]
-        : [productTitle, productDescription, productPrice, bookId];
+        ? [productTitle, productDescription, productPrice, discount, image, bookId]
+        : [productTitle, productDescription, productPrice, discount, bookId];
 
     connection.query(query, queryParams, (err, result) => {
         if (err) {
             console.error('Error updating book:', err);
             return res.status(500).json({ error: 'Error updating book' });
         }
-        res.redirect('../backend/editRoom'); // Redirect to the editRoom page after successful update
+        res.redirect('/backend/editRoom');
     });
 });
 

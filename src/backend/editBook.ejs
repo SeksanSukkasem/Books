@@ -115,30 +115,29 @@
         </nav>
     </header>
 
-
-
     <main>
-        <form action="/backend/editBook/<%= book.id %>" method="POST" enctype="multipart/form-data">
+        <form action="/backend/edit/<%= book.id %>" method="POST" enctype="multipart/form-data">
             <label for="productTitle">Title:</label>
             <input type="text" id="productTitle" name="productTitle" value="<%= book.productTitle %>" required>
-    
+
             <label for="productDescription">Description:</label>
             <textarea id="productDescription" name="productDescription" required><%= book.productDescription %></textarea>
-    
+
             <label for="productPrice">Price:</label>
             <input type="number" id="productPrice" name="productPrice" value="<%= book.productPrice %>" required>
-    
+
+            <label for="discount">Discount (%):</label>
+            <input type="number" id="discount" name="discount" value="<%= book.discount %>" required>
 
             <label for="image">Image:</label>
             <% if (book.image) { %>
                 <img src="<%= book.image %>" alt="<%= book.productTitle %>" style="max-width: 200px; display: block; margin-bottom: 10px;">
             <% } %>
             <input type="file" id="image" name="image">
-    
+
             <button type="submit">Save Changes</button>
         </form>
     </main>
-    
 
     <footer>
         <p>&copy; 2024 Online Book Rental</p>
