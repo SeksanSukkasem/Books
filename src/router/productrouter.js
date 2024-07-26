@@ -218,7 +218,7 @@ productRouters.get('/backend/editBook/:productTitle', (req, res) => {
 });
 
 // Route to handle edit book form submission
-productRouters.post('/backend/edit/:id', upload.single('image'), (req, res) => {
+productRouters.post('/backend/editBook/:id', upload.single('image'), (req, res) => {
     const bookId = req.params.id;
     const { productTitle, productDescription, productPrice, discount } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -279,6 +279,7 @@ productRouters.post('/addToCart', (req, res) => {
         });
     });
 });
+
 
 productRouters.get('/market/count', (req, res) => {
     const query = 'SELECT SUM(quantity) as totalQuantity FROM market';

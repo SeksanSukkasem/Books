@@ -268,6 +268,13 @@
             margin: 0.5rem 0;
         }
 
+        .original-price {
+            font-size: 0.9rem;
+            color: #777;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
         .product-item .btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -310,7 +317,8 @@
             <div class="header-content">
                 <h3 class="site-title">Online Book Details</h3>
                 <nav class="navbar navbar-expand-lg navbar-dark">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -364,9 +372,14 @@
                                     <p class="col-md-6"><span>Barcode:</span> <%= book.barcode %></p>
                                     <p class="col-md-6"><span>Discount:</span> <%= book.discount %>%</p>
                                 </div><br>
-                                <% const discountedPrice = book.productPrice - (book.productPrice * book.discount / 100); %>
-                                <strong class="discountedPrice">Price: <%= discountedPrice.toFixed(2) %> บาท</strong><br>
-                                <button class="btn addToCart">Add to Cart</button> (จาก <%= book.productPrice %> บาท)
+                                <div class="price">
+                                    <% const discountedPrice = book.productPrice - (book.productPrice * book.discount / 100); %>
+                                    <%= discountedPrice.toFixed(2) %> บาท
+                                    <% if (book.discount > 0) { %>
+                                    <span class="original-price">(จาก <%= book.productPrice %> บาท)</span>
+                                    <% } %>
+                                </div>
+                                <button class="btn addToCart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -382,8 +395,13 @@
                             <img class="random-product" src="<%= product.image %>" alt="<%= product.productTitle %>">
                             <h2><a href="/books/<%= product.productTitle %>"><strong><%= product.productTitle %></strong></a></h2>
                             <p><%= product.author %></p>
-                            <% const randomDiscountedPrice = product.productPrice - (product.productPrice * product.discount / 100); %>
-                            <div class="price"><%= randomDiscountedPrice %> บาท</div>
+                            <div class="price">
+                                <% const randomDiscountedPrice = product.productPrice - (product.productPrice * product.discount / 100); %>
+                                <%= randomDiscountedPrice.toFixed(2) %> บาท
+                                <% if (product.discount > 0) { %>
+                                <span class="original-price">(จาก <%= product.productPrice %> บาท)</span>
+                                <% } %>
+                            </div>
                             <button class="btn addToCart">Add to Cart</button>
                         </div>
                         <% }); %>
