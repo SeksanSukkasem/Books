@@ -103,23 +103,25 @@
         footer p {
             margin: 0;
         }
-
+/* 
         .btn-back {
             margin-bottom: 20px;
             display: block;
             text-align: center;
-        }
+        } */
 
-        .btn-back a {
-            text-decoration: none;
-            color: #fff;
-            background-color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
-
-        .btn-back a:hover {
+        .btn-back {
+            margin-bottom: 10px;
+            display: inline-block;
+            padding: 10px;
             background-color: #555;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #777;
         }
     </style>
 </head>
@@ -134,8 +136,8 @@
             </ul>
         </nav>
     </header>
-    <div class="container my-4">
-        <a href="../backend" class="btn btn-secondary btn-back">Back</a>
+    <div class="container">
+        <a href="/backend" class="btn-back">Back</a>
     </div>
     <main>
         <form class="book-form" action="/backend/editBook/<%= book.id %>" method="POST" enctype="multipart/form-data">
