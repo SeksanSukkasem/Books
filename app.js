@@ -128,6 +128,8 @@ app.post('/login', (req, res) => {
     });
 });
 
+
+
 app.get('/logout', (req, res) => {
     console.log(`User logged out: ${req.session.userId}`);
     req.session.destroy();
@@ -137,39 +139,39 @@ app.get('/logout', (req, res) => {
 app.use('/backend', isAuthenticated);
 
 // Set up view engine and paths
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
 
 // Routes for backend views
-app.get('/backend/editRoom', (req, res) => {
+app.get('../backend/editRoom', (req, res) => {
     res.render('editRoom');
 });
 
-app.get('/backend/addBook', (req, res) => {
+app.get('../backend/addBook', (req, res) => {
     res.render('Add');
 });
 
-app.get('/backend/bestSelling', (req, res) => {
+app.get('../backend/bestSelling', (req, res) => {
     res.render('bestSelling');
 });
 
-app.get('/backend/edit', (req, res) => {
+app.get('../backend/edit', (req, res) => {
     res.render('edit');
 });
 
-app.get('/backend/editBook/:id', (req, res) => {
+app.get('../backend/editBook/:id', (req, res) => {
     res.render('editBook', { id: req.params.id });
 });
 
-app.get('/backend/newsBooks', (req, res) => {
+app.get('../backend/newsBooks', (req, res) => {
     res.render('newsBooks');
 });
 
-app.get('/backend/success', (req, res) => {
+app.get('../backend/success', (req, res) => {
     res.render('success');
 });
 
-app.get('/backend/cancel', (req, res) => {
+app.get('../backend/cancel', (req, res) => {
     res.render('cancel');
 });
 
