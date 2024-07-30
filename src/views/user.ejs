@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Online Book Rental</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ddd !important;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-card img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .profile-card h2 {
+            margin-bottom: 1rem;
+        }
+
+        .profile-card p {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .rented-books,
+        .account-settings {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .book-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .book-item img {
+            width: 100px;
+            height: auto;
+            margin-right: 1rem;
+        }
+
+        .book-item h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h3 class="site-title">Online Book Rental</h3>
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/market">Market</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/user">User</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content container">
+        <div class="profile-card">
+            <img src="profile-pic.jpg" alt="Profile Picture">
+            <h2>John Doe</h2>
+            <p>Email: john.doe@example.com</p>
+            <p>Member since: January 2023</p>
+        </div>
+
+        <div class="rented-books">
+            <h3>Rented Books</h3>
+            <div class="book-item">
+                <img src="book1.jpg" alt="Book 1">
+                <div>
+                    <h4>Book Title 1</h4>
+                    <p>Author: Author 1</p>
+                    <p>Due Date: 2024-08-01</p>
+                </div>
+            </div>
+            <div class="book-item">
+                <img src="book2.jpg" alt="Book 2">
+                <div>
+                    <h4>Book Title 2</h4>
+                    <p>Author: Author 2</p>
+                    <p>Due Date: 2024-08-15</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="account-settings">
+            <h3>Account Settings</h3>
+            <form>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Online Book Rental</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

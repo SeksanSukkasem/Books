@@ -4,8 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const promptPay = require('promptpay-qr');
 const qrcode = require('qrcode');
-const { error } = require('console');
-
+const bcrypt = require('bcrypt');
 const productRouters = express.Router();
 
 // Create MySQL connection
@@ -83,9 +82,6 @@ productRouters.get('/', (req, res) => {
 });
 
 
-
-
-
 // Route to render addBook page
 productRouters.get('/backend/addBook', (req, res) => {
     res.render('../backend/Add');
@@ -128,12 +124,10 @@ productRouters.get('/books/:productTitle', (req, res) => {
                 console.error('Error fetching random products:', err);
                 return res.status(500).send('Error fetching random products');
             }
-            res.render('booksDetail',
-                {
-                    dataBooks: result,
-                    productrandom: productRandomData
-
-                });
+            res.render('booksDetail', {
+                dataBooks: result,
+                productrandom: productRandomData
+            });
         });
     });
 });
@@ -148,7 +142,6 @@ productRouters.get('/backend', (req, res) => {
         res.render('../backend/backend', { product: data });
     });
 });
-
 
 productRouters.get('/bestSelling', (req, res) => {
     const query = 'SELECT * FROM products WHERE isBestSelling = TRUE';
@@ -175,7 +168,6 @@ productRouters.post('/addBestSelling', (req, res) => {
     });
 });
 
-
 // Route to fetch new books from the newBook table
 productRouters.get('/newBooks', (req, res) => {
     const query = 'SELECT * FROM newBook';
@@ -188,7 +180,6 @@ productRouters.get('/newBooks', (req, res) => {
         res.render('../backend/newBooks', { books: results });
     });
 });
-
 
 // Route to render editRoom page
 productRouters.get('/backend/editRoom', (req, res) => {
@@ -293,26 +284,6 @@ productRouters.get('/market/count', (req, res) => {
     });
 });
 
-// // Route to handle addToCart form submission
-// productRouters.post('/addToCart', (req, res) => {
-//     const { product_id, product_title, product_price } = req.body;
-
-//     if (!product_id || !product_title || !product_price) {
-//         return res.status(400).json({ error: 'All fields are required' });
-//     }
-
-//     const query = 'INSERT INTO market (product_id, product_title, product_price, quantity) VALUES (?, ?, ?, 1) ON DUPLICATE KEY UPDATE quantity = quantity + 1';
-//     connection.query(query, [product_id, product_title, product_price], (err, results) => {
-//         if (err) {
-//             console.error('Error adding to cart:', err);
-//             return res.status(500).json({ error: 'Error adding to cart' });
-//         }
-//         res.json({ message: 'Product added to cart successfully!' });
-//     });
-
-// });
-
-
 // Route to render market page
 productRouters.get('/market', (req, res) => {
     const query = 'SELECT id, product_title, product_price, quantity FROM market';
@@ -321,9 +292,10 @@ productRouters.get('/market', (req, res) => {
             console.error('Error fetching market data:', err);
             return res.status(500).json({ error: 'Error fetching market data' });
         }
-        res.render('../views/market', { cart: results });
+        res.render('market', { cart: results });
     });
 });
+
 // Route to handle generating a QR code
 productRouters.post('/generate-qr', async (req, res) => {
     const { totalPrice } = req.body;
@@ -340,6 +312,7 @@ productRouters.post('/generate-qr', async (req, res) => {
         res.status(500).json({ error: 'Error generating QR code' });
     }
 });
+
 // Route to handle deleting a product from the market
 productRouters.post('/market/delete/:id', (req, res) => {
     const bookId = req.params.id;
@@ -354,7 +327,6 @@ productRouters.post('/market/delete/:id', (req, res) => {
     });
 });
 
-
 productRouters.get('/backend/bestSelling', (req, res) => {
     const query = 'SELECT * FROM bestSelling ORDER BY soldCount DESC';
     connection.query(query, (err, results) => {
@@ -365,27 +337,6 @@ productRouters.get('/backend/bestSelling', (req, res) => {
         res.render('../backend/bestSelling', { bestSelling: results });
     });
 });
-
-
-// productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) => {
-//     const { productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, soldCount } = req.body;
-//     const image = req.file ? `/uploads/${req.file.filename}` : null;
-
-//     if (!productTitle || !productDescription || !author || !publisher || !category || !pages || !productType || !size || !weight || !barcode || !productPrice || !soldCount || !image) {
-//         return res.status(400).json({ error: 'All fields are required' });
-//     }
-
-//     const query = 'INSERT INTO bestSelling (productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-//     connection.query(query, [productTitle, productDescription, author, publisher, category, pages, productType, size, weight, barcode, productPrice, image, soldCount], (err, results) => {
-//         if (err) {
-//             console.error('Error inserting book into database:', err);
-//             return res.status(500).json({ error: 'Error inserting book into database' });
-//         }
-//         res.json({ message: 'Best-selling book added successfully!' });
-//     });
-// });
-
-
 
 // Handle form submission for adding a new book
 productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) => {
@@ -404,6 +355,11 @@ productRouters.post('/backend/bestSelling', upload.single('image'), (req, res) =
         }
         res.json({ message: 'Best-selling book added successfully!' });
     });
+});
+
+
+productRouters.get('/User', (req, res) => {
+    res.render('../views/user');
 });
 
 
